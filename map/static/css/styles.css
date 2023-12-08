@@ -1,8 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
 body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
 }
 
 #map {
@@ -23,27 +27,35 @@ body {
 }
 
 .custom-bubble-close {
-    background-color: #f44336; 
+    background-color: #f44336;
     color: white;
-    border: none; 
-    cursor: pointer; 
-    opacity: 0.9; 
+    border: none;
+    cursor: pointer;
+    opacity: 0.9;
     transition: 0.3s;
     position: absolute;
     top: 10px;
     right: 10px;
-    padding: 5px, 5px, 5px, 5px;     
+    padding: 5px, 5px, 5px, 5px;
     border-radius: 5px;
     font-size: 20px;
 }
 
 .custom-bubble-close:hover {
-    opacity: 1; /* Fully opaque when hovered over */
+    opacity: 1;
+    /* Fully opaque when hovered over */
 }
 
 @keyframes bubble-animation {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .custom-bubble {
@@ -52,8 +64,15 @@ body {
 }
 
 @keyframes bubble-close-animation {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0); opacity: 0; }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
 }
 
 .custom-bubble-closing {
@@ -69,4 +88,90 @@ body {
     font-weight: bold;
     text-decoration: none;
     color: #2E8BC0
+}
+
+table {
+    width: 60%;
+    margin: auto;
+    border-collapse: collapse;
+    margin-left: 5%;
+    margin-top: 5%;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.form-container {
+    position: fixed;
+    right: 40px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.form-container button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}
+
+.form-container input[type="text"],
+.form-container select,
+.form-container textarea {
+    width: 100%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-container input[type="text"]:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    border-color: #4CAF50;
+}
+
+.form-container label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+.form-container .error {
+    color: red;
+    margin-left: 5px;
+}
+
+.form-container h1 {
+    text-align: center;
+}
+
+a i.fas.fa-trash-alt {
+    color: red;
 }
