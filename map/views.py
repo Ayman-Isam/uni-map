@@ -34,6 +34,7 @@ def get_lat_lng_from_gmaps_url(url):
 @login_required(login_url='login')
 def add_marker(request):
     markers = Marker.objects.all()
+    program_types = Marker.PROGRAM_TYPES
     if request.method == 'POST':
         name = request.POST.get('name')
         map_url = request.POST.get('map_url')
@@ -47,16 +48,16 @@ def add_marker(request):
         lat, lng = get_lat_lng_from_gmaps_url(map_url)
         if lat is None or lng is None:
             messages.error(request, 'Invalid Google Maps URL', extra_tags='toast-error')
-            return render(request, 'add_marker.html', {'error': 'Invalid Google Maps URL.', 'markers': markers})
+            return render(request, 'add_marker.html', {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types})
 
         # Save the data to the database
         marker = Marker(name=name, map_url=map_url, location=location, website=website, program=program, contact=contact, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
 
         messages.success(request, 'Marker added successfully', extra_tags='toast-success')
-        return redirect('add_marker')  
+        return redirect('add_marker', {'program_types': program_types})  
     else:
-        return render(request, 'add_marker.html', {'markers': markers})
+        return render(request, 'add_marker.html', {'markers': markers, 'program_types': program_types})
 
 def view_marker(request):
     markers = Marker.objects.all()

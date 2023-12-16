@@ -4,25 +4,41 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8"/>
-	<meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 	<title>{% block title %}{% endblock %}</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-		<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
-		<link rel="stylesheet" href="{% static 'css/toast.css' %}">
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-		<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
-		<script type="text/javascript" charset="utf-8" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-		<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
-		<script src="https://kit.fontawesome.com/9812d4ff58.js" crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/toast.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+	<script src="https://kit.fontawesome.com/9812d4ff58.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	{% block styles %}{% endblock %}
 </head>
 
 <body>
-	{% block content %}
-	{% endblock %}
+	<nav>
+		<ul>
+			<li><a href="{% url 'home' %}">Home</a></li>
+			{% if user.is_authenticated %}
+			<li><a href="{% url 'add_marker' %}">Add-marker</a></li>
+			<li><a href="{% url 'logout' %}">Logout</a></li>
+			{% else %}
+			<li><a href="{% url 'login' %}">Login</a></li>
+			<li><a href="{% url 'register' %}">Register</a></li>
+			{% endif %}
+			<li><a href="{% url 'view_marker' %}">List</a></li>
+		</ul>
+	</nav>
+	<main>
+		{% block content %}
+		{% endblock %}
+	</main>
 	<script src="{% static 'js/toast.js' %}"></script>
 </body>
 
