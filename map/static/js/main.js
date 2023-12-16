@@ -1,11 +1,16 @@
-function addMarkerToGroup(group, coordinate, name, location, website) {
+function addMarkerToGroup(group, coordinate, name, location, website, logo, contact, program) {
     var icon = new H.map.Icon('static/img/location.svg');
     var marker = new H.map.Marker(coordinate, { icon: icon });
     console.log(marker);
     // Create the HTML content for the marker
-    var html = `<div>
-                    <a class="uni-title" href="${website}" target="_blank"><h2>${name}</h2></a>
+    var html = `<div style="display: flex; align-items: center;">
+                    <img class="logo"src="${logo}" alt="${name} logo" style="margin-right: 10px" />
+                    <div>
+                    <a class="uni-title-link" href="${website}" target="_blank"><h2 class="uni-title">${name}</h2></a>
                     <p>${location}</p>
+                    <p>Contact: ${contact}</p>
+                    <p>Program: ${program}</p>
+                    </div>
                 </div>`;
     marker.setData(html);
     group.addObject(marker);
@@ -20,12 +25,17 @@ function addInfoBubble(map) {
         .then(response => response.text())  // Get the response as text
         .then(text => JSON.parse(text))  // Parse the text as JSON
         .then(markers => {
-            console.log(markers);  
+            console.log(markers);
             markers.forEach(marker => {
                 var fields = marker.fields;
+                console.log(fields);
+                var name = fields.name;
                 var location = fields.location;
                 var website = fields.website;
-            addMarkerToGroup(group, { lat: fields.lat, lng: fields.lng }, fields.name, location, website);
+                var logo = fields.logo;
+                var contact = fields.contact;
+                var program = fields.program;
+                addMarkerToGroup(group, { lat: fields.lat, lng: fields.lng }, name, location, website, logo, contact, program);
             });
         });
 

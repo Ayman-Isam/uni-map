@@ -1,0 +1,113 @@
+.custom-toast {
+   position: absolute;
+   top: 30px;
+   right: 30px;
+   min-width: 350px;
+   min-height: 50px;
+   max-width: 100%;
+   z-index: 9999;
+   overflow: hidden;
+   background-color: #f5f5f5;
+   border: 1px solid #ccc;
+   border-radius: 4px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   font-size: 1.5rem;
+   color: #333;
+   transition: all 0.5s ease;
+}
+
+.add-item-toast {
+   font-size: 1rem;
+   max-width: 500px;
+}
+
+.toast-body {
+   padding: 10px 40px 10px 10px!important;
+   text-align: left;
+   line-height: 1.5;
+   font-weight: 400;
+}
+
+.toast-progress-bar {
+   height: 5px;
+   width: 0;
+   background-color: #4caf50;
+}
+
+.close-button {
+   position: absolute;
+   top: 50%;
+   right: 10px;
+   transform: translateY(-50%);
+   border: none;
+   background: transparent;
+   font-size: 1.5rem;
+   cursor: pointer;
+   color: #808080;
+}
+
+/* Animations */
+@keyframes slideIn {
+   from { transform: translateX(100%); opacity: 0; }
+   to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+   from { transform: translateX(0); opacity: 1; }
+   to { transform: translateX(100%); opacity: 0; }
+}
+
+.custom-toast.slideIn {
+   animation: slideIn 0.5s forwards;
+}
+
+.custom-toast.slideOut {
+   animation: slideOut 0.5s forwards;
+}
+
+/* Toast types */
+.toast-error .icon::before,
+.toast-warning .icon::before,
+.toast-success .icon::before {
+   font-family: "Font Awesome 5 Free";
+   font-weight: 900;
+}
+
+.toast-error .icon::before {
+   font-style: normal;
+   content: "\f06a";
+}
+
+.toast-warning .icon::before {
+   font-style: normal;
+   content: "\f071";
+}
+
+.toast-success .icon::before {
+   font-style: normal;
+   content: "\f058";
+}
+
+.toast-error .toast-progress-bar {
+   background-color: #f44226;
+}
+
+.toast-warning .toast-progress-bar {
+   background-color: #ff9800;
+}
+
+.toast-success .toast-progress-bar {
+   background-color: #4caf50;
+}
+
+.toast-error .icon {
+   color: #f44336;
+}
+
+.toast-warning .icon {
+   color: #ff9800;
+}
+
+.toast-success .icon {
+   color: #4caf50;
+}

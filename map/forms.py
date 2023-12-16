@@ -16,7 +16,7 @@ def get_lat_lng_from_gmaps_url(url):
 class MarkerForm(forms.ModelForm):
     class Meta:
         model = Marker
-        fields = ['name', 'map_url', 'location', 'website']
+        fields = ['name', 'map_url', 'location', 'website', 'program','contact', 'scholarship', 'logo' ]
 
     def clean(self):
         cleaned_data = super().clean()

@@ -1,0 +1,163 @@
+:root {
+    --form-background: #83d1d6;
+    --text-color: #efefef;
+    --text-color-alt: #202020;
+    --icon-color: #bfbfbf;
+}
+
+.dark-mode {
+    --form-background: #052e36;
+    --text-color: #202020;
+    --text-color-alt: #efefef;
+    --icon-color: #545454;
+}
+/* General Styles */
+body {
+   font-family: 'Poppins', sans-serif;
+   overflow: hidden;
+   margin: 0;
+   padding: 0;
+   background: var(--form-background);
+}
+
+/* Form Body Styles */
+.form-body {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 100vh;
+   width: 100%;
+   margin-top: 0;
+}
+
+/* Form Wrapper Styles */
+.form-wrapper {
+    width: 380px;
+    background: var(--text-color);
+    color: var(--text-color-alt);
+    text-align: center;
+    padding: 40px 30px 50px 30px;
+    border-radius: 5px;
+}
+
+.form-wrapper header {
+    font-size: 35px;
+    font-weight: 600;
+}
+
+.form-wrapper form {
+    margin: 40px 0;
+}
+
+.form-wrapper a {
+    color: #5372F0;
+    text-decoration: none; 
+}
+
+.form-wrapper a:hover {
+    text-decoration: underline;
+}
+
+/* Form Field Styles */
+form .field {
+    width: 75%;
+    margin-bottom: 20px;
+}
+
+form .field input:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+form .field.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+form .field .input-area {
+    position: relative;
+}
+
+form .field.error input {
+    border-color: #dc3545;
+}
+
+form .field i {
+    position: absolute;
+    top: 50%;
+    font-size: 18px;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+form .field .icon {
+    left: 15px;
+    color: var(--icon-color);
+}
+
+form .field .error-icon {
+    right: 15px;
+    color: #dc3545;
+}
+
+form .field .error-txt {
+    color: #dc3545;
+    margin-top: 5px;
+    text-align: left;
+}
+
+form .field .error {
+    display: none;
+}
+
+form .field.error .error {
+    display: block;
+}
+
+/* Form Link Styles */
+form .pass-link {
+    text-align: left;
+    margin-top: -10px;
+}
+
+/* Form Submit Button Styles */
+form input[type="submit"] {
+    margin-top: 30px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    background: #5372F0;
+}
+
+form input[type="submit"]:hover{
+    background: #2c52ed;
+}
+
+/* Keyframes */
+@keyframes shake {
+    0%, 100% {
+       margin-left: 0;
+    }
+    20%, 80% {
+       margin-left: -12px;
+    }
+    40%, 100% {
+       margin-left: 12px;
+    }
+}
+
+/* Input Styles */
+form input {
+    height: 50px;
+    width: 100%;
+    outline: none;
+    padding: 0 45px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #bfbfbf;
+    border-bottom-width: 2px;
+}
+
+form input::placeholder {
+    color: #bfbfbf;
+    font-size: 17px;
+}

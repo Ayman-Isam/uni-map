@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-body">  
+    <div class="form-wrapper">
+      <header>Login Form</header>
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="field username">
+          <div class="input-area">
+            <input type="text" name="username" placeholder="Username">
+            <i class="icon fas fa-envelope"></i>
+            <i class="error error-icon fas fa-exclamation-circle"></i>
+          </div>
+          <div class="error error-txt">Username can't be blank</div>
+        </div>
+        <div class="field password">
+          <div class="input-area">
+            <input type="password" name="password" placeholder="Password">
+            <i class="icon fas fa-lock"></i>
+            <i class="error error-icon fas fa-exclamation-circle"></i>
+          </div>
+          <div class="error error-txt">Password can't be blank</div>
+        </div>
+        <div class="pass-txt"><a href="{% url "password_reset" %}">Forgot password?</a></div>
+        <input type="submit" value="Login">
+      </form>
+      <div class="sign-txt">Not yet member? <a href="/register/">Register</a></div>
+    </div>
+    {% for message in messages %}
+    <div class="custom-toast {{ message.tags }}">
+      <button class="close-button">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="toast-body">
+        <i class="icon"></i> {{ message }}
+      </div>
+      <div class="toast-progress-bar"></div>
+    </div>
+    {% endfor %}    
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/login.js' %}"></script>
+{% endblock %}
