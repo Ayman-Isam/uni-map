@@ -11,27 +11,30 @@ University Map
 
 {% block content %}
 <div class="form-container">
-    <h2>Add University</h2>
+    <h2>Edit University</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="field-row">
             <div class="field">
                 <label for="name">University Name</label>
-                <input type="text" name="name" placeholder="Enter University name" required>
+                <input type="text" name="name" placeholder="Enter University name" value="{{ marker.name }}" required>
             </div>
             <div class="field">
                 <label for="map_url">Map URL</label>
-                <input type="text" name="map_url" placeholder="Enter Google Maps Pin URL" required>
+                <input type="text" name="map_url" placeholder="Enter Google Maps Pin URL" value="{{ marker.map_url }}"
+                    required>
             </div>
         </div>
         <div class="field-row">
             <div class="field">
                 <label for="location">Location</label>
-                <input type="text" name="location" placeholder="Enter Location of University" required>
+                <input type="text" name="location" placeholder="Enter Location of University"
+                    value="{{ marker.location }}" required>
             </div>
             <div class="field">
                 <label for="website">Website</label>
-                <input type="text" name="website" placeholder="Enter URL of Website" required>
+                <input type="text" name="website" placeholder="Enter URL of Website" value="{{ marker.website }}"
+                    required>
             </div>
         </div>
         <div class="field-row">
@@ -45,7 +48,7 @@ University Map
 
                     <ul class="options" name="program_type">
                         {% for value, name in program_types %}
-                            <li class="option" data-value="{{ value }}">
+                            <li class="option" data-value="{{ value }}" data-name="{{ name }}" {% if marker.program_type == value %}selected{% endif %}>
                                 <span class="option-text">{{ name }}</span>
                             </li>
                         {% endfor %}
@@ -55,24 +58,24 @@ University Map
             </div>
             <div class="field">
                 <label for="program">Program</label>
-                <input type="text" name="program" placeholder="Enter Name of Program" required>
+                <input type="text" name="program" placeholder="Enter Name of Program" value="{{ marker.program }}"
+                    required>
             </div>
         </div>
         <label for="input-file" id="drop-area">
             <input type="file" accept="image/*" id="input-file" name="logo" hidden>
-            <div id="img-view">
-                <img src="{% static 'img/upload.png' %}" style="height: 100px;">
-                <p>Drag and drop or click here to upload logo</p>
+            <div id="img-view" {% if marker.logo %}style="background-image: url({{ marker.logo.url }});" {% endif %}>
             </div>
         </label>
-        <button type="submit">Add University</button>
+        <button type="submit">Edit University</button>
     </form>
 </div>
 <div class="form-sidebar">
     <h2>Instructions</h2>
     <ul>
         <li>1. Enter the official full name of the University (No Acroyms)</li>
-        <li>2. Enter the Google maps URL of the university, to do this search up the University, click on the location pin, copy the URL from the address bar and paste it </li>
+        <li>2. Enter the Google maps URL of the university, to do this search up the University, click on the location
+            pin, copy the URL from the address bar and paste it </li>
         <li>3. Enter the location of this University, can be found on Google Maps</li>
         <li>4. Enter the website of the university, this can also be found on Google Maps</li>
         <li>5. Enter the type of degree the person got admitted into the university for</li>

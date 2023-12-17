@@ -7,8 +7,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('add-marker/', views.add_marker, name='add_marker'),
+    path('edit-marker/<int:pk>', views.edit_marker, name='edit_marker'),
     path('view-marker/', views.view_marker, name='view_marker'),
-    path('add-marker/delete/<int:pk>', views.delete_marker, name='delete_marker'),
+    path('delete-marker/<int:pk>', views.delete_marker, name='delete_marker'),
     path('update-marker/', views.update_marker, name='update_marker'),
     path('api/markers', views.get_markers, name='get_markers'),
     path("login/", views.login_attempt, name="login"),

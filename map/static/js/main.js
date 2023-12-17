@@ -4,7 +4,7 @@ function addMarkerToGroup(group, coordinate, name, location, website, logo, cont
     console.log(marker);
     // Create the HTML content for the marker
     var html = `<div style="display: flex; align-items: center;">
-                    <img class="logo"src="${logo}" alt="${name} logo" style="margin-right: 10px" />
+                    <img class="uni-logo"src="media/${logo}" alt="${name} logo" style="margin-right: 10px" />
                     <div>
                     <a class="uni-title-link" href="${website}" target="_blank"><h2 class="uni-title">${name}</h2></a>
                     <p>${location}</p>

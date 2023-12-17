@@ -41,7 +41,7 @@ def add_marker(request):
         location = request.POST.get('location')
         website = request.POST.get('website')
         program = request.POST.get('program')
-        contact = request.POST.get('contact')
+        program_type = request.POST.get('program_type')
         scholarship = request.POST.get('scholarship') == 'on'
         logo = request.FILES.get('logo')
 
@@ -51,13 +51,51 @@ def add_marker(request):
             return render(request, 'add_marker.html', {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types})
 
         # Save the data to the database
-        marker = Marker(name=name, map_url=map_url, location=location, website=website, program=program, contact=contact, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
+        marker = Marker(name=name, map_url=map_url, location=location, website=website, program=program, program_type=program_type, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
 
         messages.success(request, 'Marker added successfully', extra_tags='toast-success')
-        return redirect('add_marker', {'program_types': program_types})  
+        return redirect('add_marker')  
     else:
         return render(request, 'add_marker.html', {'markers': markers, 'program_types': program_types})
+    
+def edit_marker(request, pk):
+    marker = get_object_or_404(Marker, pk=pk)
+    program_types = Marker.PROGRAM_TYPES
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        map_url = request.POST.get('map_url')
+        location = request.POST.get('location')
+        website = request.POST.get('website')
+        program = request.POST.get('program')
+        program_type = request.POST.get('program_type')
+        scholarship = request.POST.get('scholarship') == 'on'
+        logo = request.FILES.get('logo')
+
+        lat, lng = get_lat_lng_from_gmaps_url(map_url)
+        if lat is None or lng is None:
+            messages.error(request, 'Invalid Google Maps URL', extra_tags='toast-error')
+            return render(request, 'edit_marker.html', {'error': 'Invalid Google Maps URL.', 'marker': marker, 'program_types': program_types})
+
+        marker.name = name
+        marker.map_url = map_url
+        marker.location = location
+        marker.website = website
+        marker.program = program
+        marker.program_type = program_type
+        marker.scholarship = scholarship
+        if logo:
+            marker.logo.delete(save=False) 
+            marker.logo = logo  
+        marker.lat = lat
+        marker.lng = lng
+        marker.save()
+
+        messages.success(request, 'Marker updated successfully', extra_tags='toast-success')
+        return redirect('view_marker')
+    else:
+        return render(request, 'edit_marker.html', {'marker': marker, 'program_types': program_types})
 
 def view_marker(request):
     markers = Marker.objects.all()
@@ -72,7 +110,7 @@ def delete_marker(request, pk):
     marker = get_object_or_404(Marker, pk=pk)
     marker.delete()
     messages.success(request, 'Marker deleted successfully', extra_tags='toast-success')
-    return redirect('add_marker')
+    return redirect('view_marker')
 
 @csrf_exempt
 def update_marker(request):
@@ -91,7 +129,7 @@ class CustomPasswordResetView(PasswordResetView):
             response = super().form_valid(form)
             messages.success(self.request, 'Password reset link has been sent', extra_tags='toast-success')
         else:
-            messages.error(self.request, 'This email is not valid.', extra_tags='toast-error')
+            messages.error(self.request, 'An account associated with this email does not exist', extra_tags='toast-error')
         return HttpResponseRedirect(self.get_success_url())
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):

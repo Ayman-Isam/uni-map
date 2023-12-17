@@ -8,7 +8,7 @@ body {
     margin-bottom: 10px;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    background-color: #d9edf8;
+    background-color: #bbe5fc;
     overflow-x: hidden;
 }
 
@@ -45,7 +45,6 @@ body {
 
 .custom-bubble-close:hover {
     opacity: 1;
-    /* Fully opaque when hovered over */
 }
 
 @keyframes bubble-animation {
@@ -61,7 +60,6 @@ body {
 }
 
 .custom-bubble {
-    /* Other styles... */
     animation: bubble-animation 0.3s forwards;
 }
 
@@ -99,13 +97,31 @@ body {
 .table-wrapper {
     width: calc(100% - 100px);
     padding: 0 50px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
 }
 
 th,
@@ -127,251 +143,31 @@ tr:nth-child(odd) {
     background-color: #fff;
 }
 
-.form-container {
-    position: absolute;
-    top: 110px;
-    left: 40px;
-    padding: 20px;
-    width: 60%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+.uni-logo {
+    width: 150px;
+    height: auto;
+    max-height: 150px;
 }
 
-.form-container button {
-    background-color: #4CAF50;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-bottom: 20px;
-    width: calc(100% - 20px);
-    transition: all 0.3s ease;
+a i.fas {
+    font-size: x-large;
+    padding-bottom: 20px;
+    transition: color 0.3s ease;  /* Animate color changes */
 }
 
-.form-container button:hover {
-    background-color: #45a049;
-}
-
-.form-container input[type="text"],
-.form-container select,
-.form-container textarea {
-    height: 45px;
-    width: 100%;
-    outline: none;
-    font-size: 19px;
-    border-radius: 5px;
-    padding-left: 15px;
-    border: 1px solid #ccc;
-    border-bottom-width: 2px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.form-container input[type="text"]:focus,
-.form-container select:focus,
-.form-container textarea:focus {
-    border-color: #4CAF50;
-}
-
-.form-container label {
-    padding: 12px 12px 12px 0;
-    display: inline-block;
-}
-
-.form-container .error {
-    color: red;
-    margin-left: 5px;
-}
-
-.form-sidebar h2,
-.form-container h2 {
-    font-weight: 500;
-    margin-top: 0px;
-    margin-left: 10px;
+a i.fas.fa-edit {
+    color: #007bff;  /* Change the color of the edit icon */
 }
 
 a i.fas.fa-trash-alt {
-    color: red;
-    font-size: larger;
+    color: #dc3545;  /* Change the color of the delete icon */
 }
 
-.logo {
-    width: 150px;
-    height: auto;
+a:hover i.fas.fa-edit {
+    color: #0056b3;  /* Change the color of the edit icon when hovered over */
 }
 
-.field-row {
-    display: flex;
-    justify-content: space-between;
-    padding-right: 30px;
+a:hover i.fas.fa-trash-alt {
+    color: #c82333;  /* Change the color of the delete icon when hovered over */
 }
 
-.field {
-    flex: 1;
-    margin-right: 50px;
-}
-
-.field:last-child {
-    margin-right: 0;
-}
-
-.field:first-child {
-    margin-left: 10px;
-}
-
-#drop-area {
-    width: calc(100% - 25px);
-    height: 320px;
-    padding: 30px 10px;
-    background: #fff;
-    text-align: center;
-    border-radius: 20px;
-    align-items: center;
-}
-
-#img-view {
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    border: #2E8BC0 2px dashed;
-    background:#d9edf8;
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#img-view img {
-    width: 100px;
-    margin-top: 25px;
-}
-
-.form-sidebar {
-    position: absolute;
-    width: calc(30% - 30px);
-    top: 110px;
-    right: 40px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-ul {
-    list-style-type: none; /* Removes the default bullet points */
-    padding: 10px; /* Removes the default padding */
-}
-
-li {
-    padding: 10px 0; /* Adds some vertical padding to each list item */
-    border-bottom: 1px solid #ccc; /* Adds a bottom border to each list item */
-}
-
-li:last-child {
-    border-bottom: none; /* Removes the bottom border from the last list item */
-}
-
-.select-menu {
-    position: relative;
-}
-
-.select-menu .select-btn {
-    display: flex;
-    height: 10px;
-    background: #fff;
-    padding: 20px;
-    font-size: 18px;
-    font-weight: 400;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    border-bottom-width: 2px;
-    margin-right: -18px;
-    align-items: center;
-    cursor: pointer;
-    justify-content: space-between;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.select-btn i{
-    font-size: 18px;
-    transition: all 0.3s ease;
-}
-
-.select-menu.active .select-btn i {
-    transform: rotate(180deg);
-}
-
-.select-menu .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: calc(100% - 20px);
-    padding: 20px;
-    margin-top: 10px;
-    border-radius: 5px;
-    background: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    margin-right: -15px;
-    display: none;
-    z-index: 1;
-}
-
-.select-menu.active .options {
-    display: block;
-}
-
-.options .option {
-    display: flex;
-    height: 55px;
-    cursor: pointer;
-    padding: 0 16px;
-    border-radius: 5px;
-    align-items: center;
-    background: #fff;
-    border: none;
-}
-
-.options .option:hover {
-    background: #f2f2f2;
-}
-
-.option .option-text {
-    font-size: 16px;
-    color: #333;
-}
-
-nav {
-    background-color: #333;
-}
-
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-nav li {
-    float: left;
-}
-
-nav li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-nav li a:hover {
-    background-color: #111;
-}

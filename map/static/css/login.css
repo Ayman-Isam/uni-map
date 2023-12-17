@@ -4,7 +4,7 @@ body {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    background: #5372F0;
+    background: #bbe5fc;
 }
 
 /* Form Body Styles */
@@ -24,6 +24,7 @@ body {
     text-align: center;
     padding: 40px 30px 50px 30px;
     border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .form-wrapper header {
@@ -36,7 +37,7 @@ body {
 }
 
 .form-wrapper a {
-    color: #5372F0;
+    color: #30aef1;
     text-decoration: none;
 }
 
@@ -111,11 +112,12 @@ form input[type="submit"] {
     border: none;
     color: #fff;
     cursor: pointer;
-    background: #5372F0;
+    background: #30aef1;
+    transition: 0.3s ease-in-out;
 }
 
 form input[type="submit"]:hover {
-    background: #2c52ed;
+    background: #167fb8;
 }
 
 /* Keyframes */

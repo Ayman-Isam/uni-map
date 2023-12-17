@@ -28,6 +28,13 @@ class Marker(models.Model):
     scholarship = models.BooleanField(default=False)
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     
+    def save(self, *args, **kwargs):
+        if self.pk:
+            existing = Marker.objects.get(pk=self.pk)
+            if existing.logo and self.logo and existing.logo != self.logo:
+                existing.logo.delete(save=False)
+        super().save(*args, **kwargs)
+    
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     auth_token = models.CharField(max_length=100)

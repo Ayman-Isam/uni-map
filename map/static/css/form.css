@@ -1,0 +1,215 @@
+.form-container {
+    position: relative;
+    margin: 40px 0 30px 40px;
+    padding: 20px;
+    width: 60%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.form-container button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 0 0 10px 10px;
+    width: calc(100% - 20px);
+    transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}
+
+.form-container input[type="text"],
+.form-container select,
+.form-container textarea {
+    height: 45px;
+    width: 100%;
+    outline: none;
+    font-size: 19px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.form-container input[type="text"]:focus,
+.form-container select:focus,
+.form-container textarea:focus {
+    border-color: #4CAF50;
+}
+
+.form-container label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+.form-container .error {
+    color: red;
+    margin-left: 5px;
+}
+
+.form-sidebar h2,
+.form-container h2 {
+    font-weight: 500;
+    margin-top: 0px;
+    margin-left: 10px;
+}
+
+.field-row {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 30px;
+}
+
+.field {
+    flex: 1;
+    margin-right: 50px;
+}
+
+.field:last-child {
+    margin-right: 0;
+}
+
+.field:first-child {
+    margin-left: 10px;
+}
+
+#drop-area {
+    width: calc(100% - 25px);
+    height: 320px;
+    padding: 30px 10px;
+    background: #fff;
+    text-align: center;
+    border-radius: 20px;
+    align-items: center;
+}
+
+#img-view {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    border: #2E8BC0 2px dashed;
+    background: #d9edf8;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#img-view img {
+    width: 100px;
+    margin-top: 25px;
+}
+
+.form-sidebar {
+    position: absolute;
+    width: calc(30% - 30px);
+    top: 110px;
+    right: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.select-menu ul {
+    list-style-type: none;
+    /* Removes the default bullet points */
+    padding: 10px;
+    /* Removes the default padding */
+}
+
+.select-menu ul li {
+    padding: 10px 0;
+    /* Adds some vertical padding to each list item */
+    border-bottom: 1px solid #ccc;
+    /* Adds a bottom border to each list item */
+}
+
+.select-menu ul li:last-child {
+    border-bottom: none;
+    /* Removes the bottom border from the last list item */
+}
+
+.select-menu {
+    position: relative;
+}
+
+.select-menu .select-btn {
+    display: flex;
+    height: 10px;
+    background: #fff;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    margin-right: -18px;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.select-btn i {
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.select-menu.active .select-btn i {
+    transform: rotate(180deg);
+}
+
+.select-menu .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: calc(100% - 20px);
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin-right: -15px;
+    display: none;
+    z-index: 1;
+}
+
+.select-menu.active .options {
+    display: block;
+}
+
+.options .option {
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 5px;
+    align-items: center;
+    background: #fff;
+    border: none;
+}
+
+.options .option:hover {
+    background: #f2f2f2;
+}
+
+.option .option-text {
+    font-size: 16px;
+    color: #333;
+}
