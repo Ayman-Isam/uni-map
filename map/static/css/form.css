@@ -126,23 +126,23 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.select-menu ul {
+.form-sidebar ul li {
     list-style-type: none;
-    /* Removes the default bullet points */
+    margin-bottom: 10px;
+    margin-left: -10px;
+}
+
+.select-menu ul {
     padding: 10px;
-    /* Removes the default padding */
 }
 
 .select-menu ul li {
     padding: 10px 0;
-    /* Adds some vertical padding to each list item */
     border-bottom: 1px solid #ccc;
-    /* Adds a bottom border to each list item */
 }
 
 .select-menu ul li:last-child {
     border-bottom: none;
-    /* Removes the bottom border from the last list item */
 }
 
 .select-menu {

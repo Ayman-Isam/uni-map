@@ -42,7 +42,7 @@ University Map
                         <i class="fas fa-edit"></i>
                     </a>
                     <section>
-                        <a class="show-modal">
+                        <a class="show-modal" data-delete-url="{% url 'delete_marker' pk=marker.pk %}">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                         <span class="overlay"></span>
@@ -50,15 +50,13 @@ University Map
                             <i class="fas fa-trash-alt"></i>
                             <h2>Delete University?</h2>
                             <h3>Are you sure you want to delete the university listing? This action is irreversible.</h3>
+                            <h4>Tip: Hold shift to ignore this warning</h4>
                             <div class="buttons">
                                 <button class="close-btn">Cancel</button>
                                 <button><a href="{% url 'delete_marker' pk=marker.pk %}">Delete</a></button>
                             </div>
                         </div>
                     </section>
-                    <!--<a href="{% url 'delete_marker' pk=marker.pk %}">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>!-->
                 </td>
                 {% endif %}
             </tr>
