@@ -38,6 +38,10 @@ def add_marker(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         map_url = request.POST.get('map_url')
+        if map_url is None:
+            messages.error(request, 'Map URL is required', extra_tags='toast-error')
+            context = {'error': 'Map URL is required.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
+            return render(request, 'add_marker.html', context)
         location = request.POST.get('location')
         website = request.POST.get('website')
         program = request.POST.get('program')
@@ -48,9 +52,9 @@ def add_marker(request):
         lat, lng = get_lat_lng_from_gmaps_url(map_url)
         if lat is None or lng is None:
             messages.error(request, 'Invalid Google Maps URL', extra_tags='toast-error')
-            return render(request, 'add_marker.html', {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types})
+            context = {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
+            return render(request, 'add_marker.html', context)
 
-        # Save the data to the database
         marker = Marker(name=name, map_url=map_url, location=location, website=website, program=program, program_type=program_type, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
 

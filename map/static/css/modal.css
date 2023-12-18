@@ -1,0 +1,105 @@
+section {
+    height: 100%;
+    width: 100%;
+}
+
+section a {
+    background: transparent;
+}
+
+section a:hover {
+    cursor: pointer;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+}
+
+section.active .overlay {
+    opacity: 1;
+    pointer-events: none;
+}
+
+.modal-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 450px;
+    width: 100%;
+    padding: 30px 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+section.active .modal-box {
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+}
+
+.modal-box i {
+    font-size: 70px;
+    color: #dc3545;
+}
+
+.modal-box h2 {
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+.modal-box h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.modal-box buttons {
+    margin-top: 25px;
+}
+
+.modal-box button {
+    font-size: 16px;
+    padding: 6px 12px;
+    margin: 0 10px;
+    border-radius: 6px;
+    border: none;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+    background: #dc3545;
+    color: #fff;
+}
+
+.modal-box button.close-btn {
+    background: #2aaf23;
+}
+
+.modal-box button a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.modal-box button:hover {
+    cursor: pointer;
+    background: #b52130;
+    transition: all 0.3s ease;
+}
+
+.modal-box button.close-btn:hover {
+    background: #1d9216;
+}

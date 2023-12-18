@@ -17,21 +17,21 @@ University Map
         <div class="field-row">
             <div class="field">
                 <label for="name">University Name</label>
-                <input type="text" name="name" placeholder="Enter University name" required>
+                <input type="text" name="name" placeholder="Enter University name" value="{{ form_data.name|default_if_none:'' }}" required>
             </div>
             <div class="field">
                 <label for="map_url">Map URL</label>
-                <input type="text" name="map_url" placeholder="Enter Google Maps Pin URL" required>
+                <input type="text" name="map_url" placeholder="Enter Google Maps Pin URL" value="{{ form_data.map_url|default_if_none:'' }}" required>
             </div>
         </div>
         <div class="field-row">
             <div class="field">
                 <label for="location">Location</label>
-                <input type="text" name="location" placeholder="Enter Location of University" required>
+                <input type="text" name="location" placeholder="Enter Location of University" value="{{ form_data.location|default_if_none:'' }}" required>
             </div>
             <div class="field">
                 <label for="website">Website</label>
-                <input type="text" name="website" placeholder="Enter URL of Website" required>
+                <input type="text" name="website" placeholder="Enter URL of Website" value="{{ form_data.website|default_if_none:'' }}" required>
             </div>
         </div>
         <div class="field-row">
@@ -45,7 +45,7 @@ University Map
 
                     <ul class="options" name="program_type">
                         {% for value, name in program_types %}
-                            <li class="option" data-value="{{ value }}">
+                            <li class="option" data-value="{{ value }}" {% if form_data.program_type == value %}selected{% endif %}>
                                 <span class="option-text">{{ name }}</span>
                             </li>
                         {% endfor %}
@@ -55,7 +55,7 @@ University Map
             </div>
             <div class="field">
                 <label for="program">Program</label>
-                <input type="text" name="program" placeholder="Enter Name of Program" required>
+                <input type="text" name="program" placeholder="Enter Name of Program" value="{{ form_data.program|default_if_none:'' }}"z required>
             </div>
         </div>
         <label for="input-file" id="drop-area">

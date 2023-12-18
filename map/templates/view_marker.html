@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 University Map
 {% endblock %}
 
 {% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -19,31 +21,47 @@ University Map
                 <th>Degree</th>
                 <th>Program</th>
                 {% if user.is_authenticated %}
-                    <th></th>
+                <th></th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% if markers %}
             {% for marker in markers %}
-                <tr>
-                    <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo.url }}" alt="{{ marker.name }} logo" />{% endif %}</td>
-                    <td>{{ marker.name }}</td>
-                    <td>{{ marker.location }}</td>
-                    <td>{{ marker.website }}</td>
-                    <td>{{ marker.get_program_type_display }}</td>
-                    <td>{{ marker.program }}</td>
-                    {% if user.is_authenticated %}
-                    <td>
-                        <a href="{% url 'edit_marker' pk=marker.pk %}">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="{% url 'delete_marker' pk=marker.pk %}">
+            <tr>
+                <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo.url }}"
+                        alt="{{ marker.name }} logo" />{% endif %}</td>
+                <td>{{ marker.name }}</td>
+                <td>{{ marker.location }}</td>
+                <td>{{ marker.website }}</td>
+                <td>{{ marker.get_program_type_display }}</td>
+                <td>{{ marker.program }}</td>
+                {% if user.is_authenticated %}
+                <td>
+                    <a href="{% url 'edit_marker' pk=marker.pk %}">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <section>
+                        <a class="show-modal">
                             <i class="fas fa-trash-alt"></i>
                         </a>
-                    </td>
-                    {% endif %}
-                </tr>
+                        <span class="overlay"></span>
+                        <div class="modal-box">
+                            <i class="fas fa-trash-alt"></i>
+                            <h2>Delete University?</h2>
+                            <h3>Are you sure you want to delete the university listing? This action is irreversible.</h3>
+                            <div class="buttons">
+                                <button class="close-btn">Cancel</button>
+                                <button><a href="{% url 'delete_marker' pk=marker.pk %}">Delete</a></button>
+                            </div>
+                        </div>
+                    </section>
+                    <!--<a href="{% url 'delete_marker' pk=marker.pk %}">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>!-->
+                </td>
+                {% endif %}
+            </tr>
             {% endfor %}
             {% endif %}
         </tbody>
@@ -60,4 +78,6 @@ University Map
     <div class="toast-progress-bar"></div>
 </div>
 {% endfor %}
+<script src="{% static 'js/modal.js'%}">
+</script>
 {% endblock %}
