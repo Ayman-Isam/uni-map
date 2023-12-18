@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.views import PasswordResetView, PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetView, PasswordResetCompleteView, PasswordResetConfirmView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -16,6 +16,7 @@ from .decorators import unauthenticated_user
 from .models import Marker, Profile
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 def home(request):
     return render(request, 'home.html')
@@ -136,6 +137,19 @@ class CustomPasswordResetView(PasswordResetView):
             messages.error(self.request, 'An account associated with this email does not exist', extra_tags='toast-error')
         return HttpResponseRedirect(self.get_success_url())
 
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Your password has been reset.', extra_tags='toast-success')
+        return redirect('login')
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f" {error}", extra_tags='toast-error')
+        return self.render_to_response(self.get_context_data(form=form))
+
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     def get(self, request, *args, **kwargs):
         messages.success(request, 'Your password has been reset', extra_tags='toast-success')
@@ -151,18 +165,18 @@ def login_attempt(request):
         user_obj = User.objects.filter(username = username).first()
         if user_obj is None:
             messages.error(request, 'User not found', extra_tags='toast-error')
-            return redirect('/login/')
+            return render(request, 'login.html', {'username': username})
 
         profile_obj = Profile.objects.filter(user = user_obj).first()
 
         if not profile_obj.is_verified:
             messages.error(request, 'Profile is not verified, check your email', extra_tags='toast-error')
-            return redirect('/login/')
+            return render(request, 'login.html', {'username': username})
 
         user = authenticate(username=username, password=password)
         if user is None:
             messages.error(request, 'Wrong Password', extra_tags='toast-error')
-            return redirect('/login/')
+            return render(request, 'login.html', {'username': username})
 
         login(request, user)
         return redirect('/')
@@ -180,14 +194,21 @@ def register_attempt(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        
+        try:
+            validate_password(password)
+        except ValidationError as e:
+            for error in e.messages:
+                messages.error(request, error, extra_tags='toast-error')
+            return render(request, 'register.html', {'username': username, 'email': email})
 
         try:
             if User.objects.filter(username=username).first():
                 messages.error(request, 'Username is taken.', extra_tags='toast-error')
-                return redirect('/register/')
+                return render(request, 'register.html', {'username': username, 'email': email})
             if User.objects.filter(email=email).first():
                 messages.error(request, 'Email is taken.', extra_tags='toast-error')
-                return redirect('/register/')
+                return render(request, 'register.html', {'username': username, 'email': email})
             user_obj = User(username=username, email=email)
             user_obj.set_password(password)
             user_obj.save()

@@ -15,7 +15,7 @@
 			{% csrf_token %}
 			<div class="field username">
 				<div class="input-area">
-					<input type="text" name="username" placeholder="Username">
+					<input type="text" name="username" placeholder="Username" value="{{ username }}">
 					<i class="icon fas fa-user"></i>
 					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
@@ -23,7 +23,7 @@
 			</div>
 			<div class="field email">
 				<div class="input-area">
-					<input type="text" name="email" placeholder="Email Address">
+					<input type="text" name="email" placeholder="Email Address" value="{{ email }}">
 					<i class="icon fas fa-envelope"></i>
 					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
