@@ -37,31 +37,38 @@ University Map
                     required>
             </div>
         </div>
-        <div class="field-row">
-            <div class="field">
-                <label for="program">Degree Type</label>
-                <div class="select-menu">
-                    <div class="select-btn">
-                        <span class="sBtn-text">Select Program</span>
-                        <i class="fas fa-chevron-down"></i>
+        <div id="program-container">
+            {% for program in marker.programs.all %}
+            <div class="program-fields">
+                <div class="field-row">
+                    <div class="field">
+                        <label for="program">Degree</label>
+                        <div class="select-menu">
+                            <div class="select-btn">
+                                <span class="sBtn-text">{{ program.get_program_type_display }}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+        
+                            <ul class="options" name="program_type_{{ forloop.counter0 }}">
+                                {% for value, name in program_types %}
+                                    <li class="option" data-value="{{ value }}" {% if program.program_type == value %}selected{% endif %}>
+                                        <span class="option-text">{{ name }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <input type="hidden" id="program_type_{{ forloop.counter0 }}" name="program_type_{{ forloop.counter0 }}" value="{{ program.program_type }}">
+                        </div>
                     </div>
-
-                    <ul class="options" name="program_type">
-                        {% for value, name in program_types %}
-                            <li class="option" data-value="{{ value }}" data-name="{{ name }}" {% if marker.program_type == value %}selected{% endif %}>
-                                <span class="option-text">{{ name }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <input type="hidden" id="program_type" name="program_type">
+                    <div class="field">
+                        <label for="program">Program</label>
+                        <input type="text" name="program_{{ forloop.counter0 }}" placeholder="Enter Name of Program" value="{{ program.name }}" required>
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <label for="program">Program</label>
-                <input type="text" name="program" placeholder="Enter Name of Program" value="{{ marker.program }}"
-                    required>
-            </div>
+            {% endfor %}
         </div>
+        <button type="button" id="add-program"><i class="fa-solid fa-plus"></i>Add Course</button>
+        <button type="button" id="remove-program"><i class="fa-solid fa-minus"></i>Remove Course</button>
         <label for="input-file" id="drop-area">
             <input type="file" accept="image/*" id="input-file" name="logo" hidden>
             <div id="img-view" {% if marker.logo %}style="background-image: url({{ marker.logo.url }});" {% endif %}>

@@ -18,7 +18,6 @@ University Map
                 <th>Name</th>
                 <th>Location</th>
                 <th>Website</th>
-                <th>Degree</th>
                 <th>Program</th>
                 {% if user.is_authenticated %}
                 <th></th>
@@ -29,13 +28,15 @@ University Map
             {% if markers %}
             {% for marker in markers %}
             <tr>
-                <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo.url }}"
-                        alt="{{ marker.name }} logo" />{% endif %}</td>
+                <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo.url }}" alt="{{ marker.name }} logo" />{% endif %}</td>
                 <td>{{ marker.name }}</td>
                 <td>{{ marker.location }}</td>
                 <td>{{ marker.website }}</td>
-                <td>{{ marker.get_program_type_display }}</td>
-                <td>{{ marker.program }}</td>
+                <td>
+                    {% for program in marker.programs.all %}
+                        {{ program.get_program_type_display }} in {{ program.name }}<br><br>
+                    {% endfor %}
+                </td>
                 {% if user.is_authenticated %}
                 <td>
                     <a href="{% url 'edit_marker' pk=marker.pk %}">

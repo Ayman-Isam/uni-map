@@ -10,7 +10,7 @@
 }
 
 .form-container button {
-    background-color: #4CAF50;
+    background-color: #42b5f2;
     color: white;
     font-weight: 600;
     font-size: 18px;
@@ -24,7 +24,7 @@
 }
 
 .form-container button:hover {
-    background-color: #45a049;
+    background-color: #1e8fcb;
 }
 
 .form-container input[type="text"],
@@ -45,7 +45,7 @@
 .form-container input[type="text"]:focus,
 .form-container select:focus,
 .form-container textarea:focus {
-    border-color: #4CAF50;
+    border-color: #51cbee;
 }
 
 .form-container label {
@@ -212,6 +212,27 @@
 .option .option-text {
     font-size: 16px;
     color: #333;
+}
+
+#add-program,
+#remove-program {
+    width: calc((100% - 52.5px) / 2);
+    margin-top: 20px;
+    background-color: #42b5f2;
+}
+
+#add-program:hover,
+#remove-program:hover {
+    background-color: #1e8fcb;
+}
+
+#remove-program {
+    margin-left: 27.5px;
+}
+
+#add-program i,
+#remove-program i {
+    margin-right: 10px;
 }
 
 .password-container {

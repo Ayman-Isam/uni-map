@@ -88,10 +88,28 @@ body {
     font-size: 20px;
 }
 
+.uni-title:hover {
+    text-decoration: underline;
+}
+
 .uni-title-link {
     font-weight: bold;
     text-decoration: none;
     color: #2E8BC0;
+}
+
+.uni-title-link:hover {
+    color: #2176d1;
+}
+
+.uni-title-link i {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.uni-title, .uni-title-link i {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .table-wrapper {

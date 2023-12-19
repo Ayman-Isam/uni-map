@@ -13,7 +13,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .decorators import unauthenticated_user
-from .models import Marker, Profile
+from .models import Marker, Profile, Program
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
@@ -35,7 +35,7 @@ def get_lat_lng_from_gmaps_url(url):
 @login_required(login_url='login')
 def add_marker(request):
     markers = Marker.objects.all()
-    program_types = Marker.PROGRAM_TYPES
+    program_types = Program.PROGRAM_TYPES
     if request.method == 'POST':
         name = request.POST.get('name')
         map_url = request.POST.get('map_url')
@@ -45,8 +45,6 @@ def add_marker(request):
             return render(request, 'add_marker.html', context)
         location = request.POST.get('location')
         website = request.POST.get('website')
-        program = request.POST.get('program')
-        program_type = request.POST.get('program_type')
         scholarship = request.POST.get('scholarship') == 'on'
         logo = request.FILES.get('logo')
 
@@ -56,25 +54,42 @@ def add_marker(request):
             context = {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
             return render(request, 'add_marker.html', context)
 
-        marker = Marker(name=name, map_url=map_url, location=location, website=website, program=program, program_type=program_type, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
+        marker = Marker(name=name, map_url=map_url, location=location, website=website, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
+        
+        program_index = 0
+        while True:
+            program_name = request.POST.get('program_' + str(program_index))
+            program_type = request.POST.get('program_type_' + str(program_index))
 
-        messages.success(request, 'Marker added successfully', extra_tags='toast-success')
-        return redirect('add_marker')  
+            if program_name is None or program_type is None:
+                if program_index == 0:
+                    messages.error(request, 'At least one program must be added', extra_tags='toast-error')
+                    context = {'error': 'At least one program must be added.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
+                    return render(request, 'add_marker.html', context)
+                else:
+                    break
+
+            program = Program(name=program_name, program_type=program_type)
+            program.save()
+            marker.programs.add(program)
+
+            program_index += 1
+        
+        messages.success(request, 'University added successfully', extra_tags='toast-success')
+        return redirect('view_marker')  
     else:
         return render(request, 'add_marker.html', {'markers': markers, 'program_types': program_types})
     
 def edit_marker(request, pk):
     marker = get_object_or_404(Marker, pk=pk)
-    program_types = Marker.PROGRAM_TYPES
+    program_types = Program.PROGRAM_TYPES
 
     if request.method == 'POST':
         name = request.POST.get('name')
         map_url = request.POST.get('map_url')
         location = request.POST.get('location')
         website = request.POST.get('website')
-        program = request.POST.get('program')
-        program_type = request.POST.get('program_type')
         scholarship = request.POST.get('scholarship') == 'on'
         logo = request.FILES.get('logo')
 
@@ -87,14 +102,38 @@ def edit_marker(request, pk):
         marker.map_url = map_url
         marker.location = location
         marker.website = website
-        marker.program = program
-        marker.program_type = program_type
         marker.scholarship = scholarship
         if logo:
             marker.logo.delete(save=False) 
             marker.logo = logo  
         marker.lat = lat
         marker.lng = lng
+
+        new_programs = []
+        program_index = 0
+        while True:
+            program_name = request.POST.get('program_' + str(program_index))
+            program_type = request.POST.get('program_type_' + str(program_index))
+
+            if program_name is None or program_type is None:
+                if program_index == 0:
+                    messages.error(request, 'At least one program must be added', extra_tags='toast-error')
+                    context = {'error': 'At least one program must be added.', 'marker': marker, 'program_types': program_types, 'form_data': request.POST}
+                    return render(request, 'edit_marker.html', context)
+                else:
+                    break
+
+            program = Program(name=program_name, program_type=program_type)
+            program.save()
+            new_programs.append(program)
+
+            program_index += 1
+
+        if new_programs:
+            marker.programs.clear()
+            for program in new_programs:
+                marker.programs.add(program)
+
         marker.save()
 
         messages.success(request, 'Marker updated successfully', extra_tags='toast-success')
@@ -105,11 +144,18 @@ def edit_marker(request, pk):
 def view_marker(request):
     markers = Marker.objects.all()
     return render(request, 'view_marker.html', {'markers': markers})
-    
+
 def get_markers(request):
     markers = Marker.objects.all()
-    marker_list = serializers.serialize('json', markers)
-    return JsonResponse(json.loads(marker_list), safe=False)
+    marker_list = []
+    for marker in markers:
+        marker_dict = serializers.serialize('json', [marker])
+        marker_dict = json.loads(marker_dict)[0]  # Convert the serialized string back to a dictionary
+        programs = marker.programs.all()
+        program_list = [{'name': program.name, 'program_type_display': program.get_program_type_display()} for program in programs]
+        marker_dict['fields']['programs'] = program_list  # Add the programs to the marker dictionary
+        marker_list.append(marker_dict)
+    return JsonResponse(marker_list, safe=False)
 
 def delete_marker(request, pk):
     marker = get_object_or_404(Marker, pk=pk)

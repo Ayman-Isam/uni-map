@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Marker(models.Model):
+class Program(models.Model):
     PROGRAM_TYPES = [
         ("BA", "Bachelor of Arts"),
         ("BS", "Bachelor of Science"),
@@ -15,16 +15,25 @@ class Marker(models.Model):
         ("BSW", "Bachelor of Social Work"),
         ("NA", "Other"),
     ]
+
+    name = models.CharField(max_length=200)
+    program_type = models.CharField(max_length=5, choices=PROGRAM_TYPES, default='NA')
     
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'program_type': self.program_type,
+        }
+
+class Marker(models.Model):
     name = models.CharField(max_length=100)
     map_url = models.CharField(max_length=1000)
-    lat = models.FloatField()
+    lat = models.FloatField()  
     lng = models.FloatField()
     location = models.CharField(max_length=500)
     website = models.CharField(max_length=100)
     contact = models.CharField(max_length=200, blank=True, null=True)
-    program = models.CharField(max_length=200, blank=True, null=True)
-    program_type = models.CharField(max_length=5, choices=PROGRAM_TYPES, default='NA')
+    programs = models.ManyToManyField('Program', blank=True)
     scholarship = models.BooleanField(default=False)
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     
@@ -34,6 +43,11 @@ class Marker(models.Model):
             if existing.logo and self.logo and existing.logo != self.logo:
                 existing.logo.delete(save=False)
         super().save(*args, **kwargs)
+        
+    def to_representation(self):
+        representation = super().to_representation()
+        representation['programs'] = [program.to_dict() for program in self.programs.all()]
+        return representation
     
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

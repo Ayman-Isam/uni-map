@@ -20,37 +20,86 @@ dropArea.addEventListener("drop", function (event) {
     uploadImage();
 });
 
-const optionMenu = document.querySelector(".select-menu"),
-        selectBtn = optionMenu.querySelector(".select-btn"), 
-        options = optionMenu.querySelectorAll(".option"), 
-        sBtn_text = optionMenu.querySelector(".sBtn-text"),
-        hiddenInput = document.getElementById("program_type");
+function addSelectMenuEventListeners(optionMenu, index) {
+    var selectBtn = optionMenu.querySelector(".select-btn");
+    var options = optionMenu.querySelectorAll(".option");
+    var sBtn_text = optionMenu.querySelector(".sBtn-text");
+    var hiddenInput = optionMenu.querySelector("#program_type_" + index);
 
-selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
+    selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
 
-options.forEach(option => {
-    option.addEventListener("click", () => {
-        let selectedOption = option.querySelector(".option-text").innerText;
-        sBtn_text.innerText = selectedOption;
+    options.forEach(option => {
+        option.addEventListener("click", () => {
+            let selectedOption = option.querySelector(".option-text").innerText;
+            sBtn_text.innerText = selectedOption;
 
-        let value = option.getAttribute("data-value");
-        hiddenInput.value = value;
-        
-        optionMenu.classList.remove("active");
+            let value = option.getAttribute("data-value");
+            hiddenInput.value = value;
+
+            optionMenu.classList.remove("active");
+        });
     });
+}
+
+var optionMenus = document.querySelectorAll(".select-menu");
+optionMenus.forEach((optionMenu, index) => {
+    addSelectMenuEventListeners(optionMenu, index);
 });
 
 window.onload = function() {
-    const selectedOption = document.querySelector(".option[selected]");
-    if (selectedOption) {
+    const selectedOptions = document.querySelectorAll(".option[selected]");
+    selectedOptions.forEach(selectedOption => {
         const selectedText = selectedOption.querySelector(".option-text").innerText;
         const selectedValue = selectedOption.getAttribute("data-value");
-        const sBtn_text = document.querySelector(".sBtn-text");
-        const hiddenInput = document.getElementById("program_type");
+        const sBtn_text = selectedOption.closest('.select-menu').querySelector(".sBtn-text");
+        const hiddenInput = selectedOption.closest('.select-menu').querySelector(".program-type-input");
         sBtn_text.innerText = selectedText;
         hiddenInput.value = selectedValue;
-    }
+    });
 }
+
+document.getElementById('add-program').addEventListener('click', function() {
+    var programContainer = document.getElementById('program-container');
+    var programFields = document.querySelector('.program-fields');
+    var newProgramFields = programFields.cloneNode(true);
+
+    var numProgramFields = programContainer.getElementsByClassName('program-fields').length;
+
+    var inputs = newProgramFields.querySelectorAll('input');
+    inputs = Array.from(inputs).filter(node => node.nodeType === Node.ELEMENT_NODE);
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].name = inputs[i].name.replace(/_0/, '_' + numProgramFields);
+        inputs[i].id = inputs[i].id.replace(/_0/, '_' + numProgramFields);
+        inputs[i].value = '';
+    }
+
+    var hiddenInput = newProgramFields.querySelector('input[type="hidden"]');
+    hiddenInput.id = hiddenInput.id.replace(/_0/, '_' + numProgramFields);
+
+    var selectBtn = newProgramFields.querySelector(".sBtn-text");
+    selectBtn.textContent = "Select Program";
+
+    programContainer.appendChild(newProgramFields);
+
+    var newOptionMenu = newProgramFields.querySelector(".select-menu");
+    addSelectMenuEventListeners(newOptionMenu, numProgramFields);
+
+    document.getElementById('remove-program').disabled = false;
+});
+
+document.getElementById('remove-program').addEventListener('click', function() {
+    var programContainer = document.getElementById('program-container');
+    var programFields = programContainer.getElementsByClassName('program-fields');
+    var removeProgramButton = document.getElementById('remove-program');
+
+    if (programFields.length > 1) {
+        programContainer.removeChild(programFields[programFields.length - 1]);
+    }
+
+    if (programFields.length <= 1) {
+        removeProgramButton.disabled = true;
+    }
+});
 
 
 

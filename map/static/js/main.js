@@ -1,15 +1,14 @@
-function addMarkerToGroup(group, coordinate, name, location, website, logo, contact, program) {
+function addMarkerToGroup(group, coordinate, name, location, website, logo, programs) {
     var icon = new H.map.Icon('static/img/location.svg');
     var marker = new H.map.Marker(coordinate, { icon: icon });
-    console.log(marker);
-    // Create the HTML content for the marker
+    var programList = programs.map(program => `<li>${program.program_type_display} in ${program.name}</li>`).join('');
     var html = `<div style="display: flex; align-items: center;">
                     <img class="uni-logo"src="media/${logo}" alt="${name} logo" style="margin-right: 10px" />
                     <div>
                     <a class="uni-title-link" href="${website}" target="_blank"><h2 class="uni-title">${name}</h2></a>
                     <p>${location}</p>
-                    <p>Contact: ${contact}</p>
-                    <p>Program: ${program}</p>
+                    <p>Programs:</p>
+                    <ul>${programList}</ul>
                     </div>
                 </div>`;
     marker.setData(html);
@@ -33,9 +32,8 @@ function addInfoBubble(map) {
                 var location = fields.location;
                 var website = fields.website;
                 var logo = fields.logo;
-                var contact = fields.contact;
-                var program = fields.program;
-                addMarkerToGroup(group, { lat: fields.lat, lng: fields.lng }, name, location, website, logo, contact, program);
+                var programs = fields.programs;
+                addMarkerToGroup(group, { lat: fields.lat, lng: fields.lng }, name, location, website, logo, programs);
             });
         });
 
