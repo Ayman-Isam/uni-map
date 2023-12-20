@@ -15,35 +15,33 @@
 			{% csrf_token %}
 			<div class="field username">
 				<div class="input-area">
-					<input type="text" name="username" placeholder="Username" value="{{ username }}">
+					<input type="text" name="username" placeholder="Username" value="{{ username }}" required>
 					<i class="icon fas fa-user"></i>
-					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
-				<div class="error error-txt">Username can't be blank</div>
 			</div>
 			<div class="field email">
 				<div class="input-area">
-					<input type="text" name="email" placeholder="Email Address" value="{{ email }}">
+					<input type="text" name="email" placeholder="Email Address" value="{{ email }}" required>
 					<i class="icon fas fa-envelope"></i>
-					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
-				<div class="error error-txt">Email can't be blank</div>
 			</div>
 			<div class="field password">
 				<div class="input-area">
-					<input type="password" name="password" placeholder="Password">
+					<input type="password" name="password" placeholder="Password" required>
 					<i class="icon fas fa-lock"></i>
-					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
-				<div class="error error-txt">Password can't be blank</div>
 			</div>
 			<div class="field confirm-password">
 				<div class="input-area">
-					<input type="password" name="confirm-password" placeholder="Confirm Password">
+					<input type="password" name="confirm-password" placeholder="Confirm Password" required>
 					<i class="icon fas fa-lock"></i>
-					<i class="error error-icon fas fa-exclamation-circle"></i>
 				</div>
-				<div class="error error-txt">Confirm password can't be blank</div>
+			</div>
+			<div class="field code">
+				<div class="input-area">
+					<input type="password" name="code" placeholder="Code" required>
+					<i class="icon fas fa-key"></i>
+				</div>
 			</div>
 			<div class="pass-txt"><a href="{% url "password_reset" %}">Forgot password?</a></div>
 			<input type="submit" value="Register">

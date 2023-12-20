@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+University Map
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="table-wrapper" style="margin-top:10px; text-align:center">
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Action</th>
+                <th>Time</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.user.username }}</td>
+                <td>{{ log.user.email }}</td>
+                <td>{{ log.action }}</td>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.details }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% for message in messages %}
+<div class="custom-toast {{ message.tags }}">
+    <button class="close-button">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="toast-body">
+        <i class="icon"></i> {{ message }}
+    </div>
+    <div class="toast-progress-bar"></div>
+</div>
+{% endfor %}
+<script src="{% static 'js/modal.js'%}">
+</script>
+{% endblock %}

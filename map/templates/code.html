@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+University Map
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/modal.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="table-wrapper" style="width: 60%; margin-top:10px">
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Email</th>
+                <th>Created At</th>
+                <th>Valid</th>
+                <th>Expiry Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if codes %}
+            {% for code in codes %}
+            <tr>
+                <td>{{ code.code }}</td>
+                <td>{{ code.email }}</td>
+                <td>{{ code.created_at }}</td>
+                <td>{{ code.is_valid }}</td>
+                <td>{{ code.expires_at }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<form class="code-container" method="post" action="{% url 'create_code' %}">
+    <h2>Send Code</h2>
+    {% csrf_token %}
+    <div class="field">
+        <label for="email">Email</label>
+        <input type="text" name="email" placeholder="Enter Email Address" required>
+    </div>
+    <button type="submit">Send Code</button>
+</form>
+{% for message in messages %}
+<div class="custom-toast {{ message.tags }}">
+    <button class="close-button">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="toast-body">
+        <i class="icon"></i> {{ message }}
+    </div>
+    <div class="toast-progress-bar"></div>
+</div>
+{% endfor %}
+<script src="{% static 'js/modal.js'%}">
+</script>
+{% endblock %}

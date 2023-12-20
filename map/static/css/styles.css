@@ -119,45 +119,45 @@ body {
     overflow: hidden;
 }
 
-table {
+.table-wrapper table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 3%;
     margin-bottom: 3%;
 }
 
-tr:first-child th:first-child {
+.table-wrapper tr:first-child th:first-child {
     border-top-left-radius: 10px;
 }
 
-tr:first-child th:last-child {
+.table-wrapper tr:first-child th:last-child {
     border-top-right-radius: 10px;
 }
 
-tr:last-child td:first-child {
+.table-wrapper tr:last-child td:first-child {
     border-bottom-left-radius: 10px;
 }
 
-tr:last-child td:last-child {
+.table-wrapper tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
 }
 
-th,
-td {
+.table-wrapper th,
+.table-wrapper td {
     padding: 20px;
 }
 
-th {
-    background-color: #4CAF50;
+.table-wrapper th {
+    background-color: #30aef1;
     color: white;
     font-size: 20px;
 }
 
-tr:nth-child(even) {
+.table-wrapper tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-tr:nth-child(odd) {
+.table-wrapper tr:nth-child(odd) {
     background-color: #fff;
 }
 

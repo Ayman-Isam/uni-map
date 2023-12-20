@@ -37,7 +37,9 @@
 			<li><a href="{% url 'logout' %}">Logout</a></li>
 			{% else %}
 			<li><a href="{% url 'login' %}">Login</a></li>
-			<li><a href="{% url 'register' %}">Register</a></li>
+			{% endif %}
+			{% if user.is_superuser %}
+			<li><a href="{% url 'view_code' %}">Code</a></li>
 			{% endif %}
 		</ul>
 	</nav>

@@ -1,9 +1,14 @@
 import json
 import uuid
+import random
+import string
+from django.utils import timezone
+from django.shortcuts import redirect
+from django.contrib import messages
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordResetView, PasswordResetCompleteView, PasswordResetConfirmView
 from django.core.mail import send_mail
@@ -13,8 +18,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .decorators import unauthenticated_user
-from .models import Marker, Profile, Program
-from django.core.validators import URLValidator
+from .models import Marker, Profile, Program, Code, AuditLog
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
@@ -56,6 +60,7 @@ def add_marker(request):
 
         marker = Marker(name=name, map_url=map_url, location=location, website=website, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
+        AuditLog.objects.create(user=request.user, action='create', details=f'Added marker {marker.name}')
         
         program_index = 0
         while True:
@@ -135,11 +140,20 @@ def edit_marker(request, pk):
                 marker.programs.add(program)
 
         marker.save()
+        AuditLog.objects.create(user=request.user, action='update', details=f'Updated marker {marker.name}')
 
         messages.success(request, 'Marker updated successfully', extra_tags='toast-success')
         return redirect('view_marker')
     else:
         return render(request, 'edit_marker.html', {'marker': marker, 'program_types': program_types})
+    
+def delete_marker(request, pk):
+    marker = get_object_or_404(Marker, pk=pk)
+    marker_name = marker.name
+    marker.delete()
+    AuditLog.objects.create(user=request.user, action='delete', details=f'Deleted marker {marker_name}')
+    messages.success(request, 'Marker deleted successfully', extra_tags='toast-success')
+    return redirect('view_marker')
 
 def view_marker(request):
     markers = Marker.objects.all()
@@ -157,12 +171,6 @@ def get_markers(request):
         marker_list.append(marker_dict)
     return JsonResponse(marker_list, safe=False)
 
-def delete_marker(request, pk):
-    marker = get_object_or_404(Marker, pk=pk)
-    marker.delete()
-    messages.success(request, 'Marker deleted successfully', extra_tags='toast-success')
-    return redirect('view_marker')
-
 @csrf_exempt
 def update_marker(request):
     data = json.loads(request.body)
@@ -170,6 +178,43 @@ def update_marker(request):
     setattr(marker, data['column'], data['value'])
     marker.save()
     return JsonResponse({'status': 'success'})
+
+def generate_code(length=15):
+    letters_and_digits = string.ascii_letters + string.digits
+    return ''.join((random.choice(letters_and_digits) for _ in range(length)))
+
+@user_passes_test(lambda u: u.is_superuser)
+def create_code(request):
+    code = generate_code()
+    email = request.POST.get('email')
+    new_code = Code(code=code, email=email, is_valid=True, expires_at=timezone.now() + timezone.timedelta(days=3))
+    new_code.save()
+    
+    send_mail(
+        'Your registration code',
+        '',
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+        html_message=f'''
+            <h1>Your registration code</h1>
+            <p>Your registration code is: <strong>{code}</strong></p>
+            <p>Make sure you use this email to register at <a href="https://unimap.pythonanywhere.com/verify/">https://unimap.pythonanywhere.com/verify/</a>.</p>
+            <p>Please note that this code will expire in 3 days.</p>
+        ''',
+    )
+    
+    messages.success(request, 'Code sent successfully.', extra_tags='toast-success')
+    return redirect('view_code')
+
+@user_passes_test(lambda u: u.is_superuser)
+def view_code(request):
+    codes = Code.objects.all()
+    return render(request, 'code.html', {'codes': codes})
+
+def view_audit_logs(request):
+    logs = AuditLog.objects.all()
+    return render(request, 'audit_logs.html', {'logs': logs})
 
 class CustomPasswordResetView(PasswordResetView):
     success_url = reverse_lazy('password_reset')
@@ -233,14 +278,31 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("login"))
 
-#Decorator to prevent logged in user from viewing register page  
 @unauthenticated_user
 def register_attempt(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        code = request.POST.get('code')
         
+        code_obj = Code.objects.filter(code=code).first()
+    
+        if code_obj and code_obj.expires_at < timezone.now():
+            code_obj.is_valid = False
+            code_obj.save()
+        
+        if not code_obj or not code_obj.is_valid:
+            messages.error(request, 'Invalid or expired code.', extra_tags='toast-error')
+            return render(request, 'register.html', {'username': username, 'email': email})
+        
+        if not code_obj.email == email:
+            messages.error(request, 'Email does not match email attached to code.', extra_tags='toast-error')
+            return render(request, 'register.html', {'username': username, 'email': email})
+        
+        code_obj.is_valid = False
+        code_obj.save()
+           
         try:
             validate_password(password)
         except ValidationError as e:
@@ -271,7 +333,6 @@ def register_attempt(request):
 def success(request):
     return render(request,'success.html')  
 
-
 def verify (request, auth_token):
     try: 
         profile_obj = Profile.objects.filter(auth_token=auth_token).first()
@@ -289,7 +350,6 @@ def verify (request, auth_token):
             return redirect('/error/')
     except Exception as e:
         print(e)
-
 
 def error_page(request):
     return render(request, 'error.html')

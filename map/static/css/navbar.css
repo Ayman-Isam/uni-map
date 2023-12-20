@@ -1,5 +1,5 @@
 nav {
-    background: #45a049;
+    background: #30aef1;
     height: 70px;
     width: 100%;
     margin: 0;
@@ -44,7 +44,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background: #56c05b;
+    background: #167fb8;
     transition: .5s;
 }
 
@@ -52,7 +52,7 @@ nav ul li a:hover {
     background: none;
     color: white; 
     transition: none;
-    background: #56c05b;
+    background: #167fb8;
     transition: .5s;
 }
 

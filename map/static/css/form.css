@@ -9,7 +9,8 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-.form-container button {
+.form-container button,
+.code-container button {
     background-color: #42b5f2;
     color: white;
     font-weight: 600;
@@ -18,18 +19,22 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    margin: 0 0 10px 10px;
+    margin: 0 0 0 10px;
     width: calc(100% - 20px);
     transition: all 0.3s ease;
 }
 
-.form-container button:hover {
+.form-container button:hover,
+.code-container button:hover {
     background-color: #1e8fcb;
 }
 
 .form-container input[type="text"],
 .form-container select,
-.form-container textarea {
+.form-container textarea,
+.code-container input[type="text"],
+.code-container select,
+.code-container textarea {
     height: 45px;
     width: 100%;
     outline: none;
@@ -44,25 +49,57 @@
 
 .form-container input[type="text"]:focus,
 .form-container select:focus,
-.form-container textarea:focus {
+.form-container textarea:focus,
+.code-container input[type="text"]:focus,
+.code-container select:focus,
+.code-container textarea:focus {
     border-color: #51cbee;
 }
 
-.form-container label {
+.form-container label,
+.code-container label {
     padding: 12px 12px 12px 0;
     display: inline-block;
 }
 
-.form-container .error {
+.form-container .error,
+.code-container .error {
     color: red;
     margin-left: 5px;
 }
 
 .form-sidebar h2,
-.form-container h2 {
+.form-container h2,
+.code-sidebar h2,
+.code-container h2 {
     font-weight: 500;
     margin-top: 0px;
     margin-left: 10px;
+}
+
+.code-container {
+    position: absolute;
+    width: calc(30% - 30px);
+    top: 110px;
+    right: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.code-container button {
+    margin-top: 20px;
+}
+
+.code-container input[type="text"],
+.code-container label {
+    margin-left: 10px;
+}
+
+.code-container input[type="text"] {
+    width: calc(100% + 10px);
 }
 
 .field-row {

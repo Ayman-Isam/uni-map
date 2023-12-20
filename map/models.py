@@ -54,3 +54,19 @@ class Profile(models.Model):
     auth_token = models.CharField(max_length=100)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class Code(models.Model):
+    code = models.CharField(max_length=15)
+    email = models.EmailField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_valid = models.BooleanField(default=True)
+    expires_at = models.DateTimeField()
+
+class AuditLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.CharField(max_length=6, blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    details = models.TextField()
+
+    class Meta:
+        ordering = ['-timestamp']
