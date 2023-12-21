@@ -21,6 +21,12 @@ from .decorators import unauthenticated_user
 from .models import Marker, Profile, Program, Code, AuditLog
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from django.views.generic import ListView
+from .models import Marker
+from django.db.models import Q
+from urllib.parse import urljoin
+from django.core.paginator import Paginator
+
 
 def home(request):
     return render(request, 'home.html')
@@ -60,7 +66,7 @@ def add_marker(request):
 
         marker = Marker(name=name, map_url=map_url, location=location, website=website, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
         marker.save()
-        AuditLog.objects.create(user=request.user, action='create', details=f'Added marker {marker.name}')
+        AuditLog.objects.create(user=request.user, action='Create', details=f'Added marker {marker.name}')
         
         program_index = 0
         while True:
@@ -140,7 +146,7 @@ def edit_marker(request, pk):
                 marker.programs.add(program)
 
         marker.save()
-        AuditLog.objects.create(user=request.user, action='update', details=f'Updated marker {marker.name}')
+        AuditLog.objects.create(user=request.user, action='Update', details=f'Updated marker {marker.name}')
 
         messages.success(request, 'Marker updated successfully', extra_tags='toast-success')
         return redirect('view_marker')
@@ -151,25 +157,59 @@ def delete_marker(request, pk):
     marker = get_object_or_404(Marker, pk=pk)
     marker_name = marker.name
     marker.delete()
-    AuditLog.objects.create(user=request.user, action='delete', details=f'Deleted marker {marker_name}')
+    AuditLog.objects.create(user=request.user, action='Delete', details=f'Deleted marker {marker_name}')
     messages.success(request, 'Marker deleted successfully', extra_tags='toast-success')
     return redirect('view_marker')
 
-def view_marker(request):
-    markers = Marker.objects.all()
-    return render(request, 'view_marker.html', {'markers': markers})
+class MarkerListView(ListView):
+    model = Marker
+    template_name = 'view_marker.html'  
+    context_object_name = 'markers'  
+    paginate_by = 10
 
 def get_markers(request):
     markers = Marker.objects.all()
     marker_list = []
     for marker in markers:
         marker_dict = serializers.serialize('json', [marker])
-        marker_dict = json.loads(marker_dict)[0]  # Convert the serialized string back to a dictionary
+        marker_dict = json.loads(marker_dict)[0]  
         programs = marker.programs.all()
         program_list = [{'name': program.name, 'program_type_display': program.get_program_type_display()} for program in programs]
-        marker_dict['fields']['programs'] = program_list  # Add the programs to the marker dictionary
+        marker_dict['fields']['programs'] = program_list  
         marker_list.append(marker_dict)
     return JsonResponse(marker_list, safe=False)
+
+def search_markers(request):
+    query = request.GET.get('query', '')
+    q_objects = Q(name__icontains=query) | Q(location__icontains=query) | Q(website__icontains=query) | Q(programs__name__icontains=query)
+    for choice_value, choice_display in Program.PROGRAM_TYPES:
+        if query.lower() in choice_display.lower():
+            q_objects |= Q(programs__program_type=choice_value)
+    markers = Marker.objects.filter(q_objects).distinct()
+
+    markers_list = []
+    for marker in markers:
+        programs = marker.programs.all()
+        logo_url = None
+        if marker.logo:
+            logo_url = urljoin(settings.MEDIA_URL, marker.logo.url)
+        marker_dict = {
+            'name': marker.name,
+            'location': marker.location,
+            'website': marker.website,
+            'logo': logo_url,
+            'programs': programs,
+        }
+        
+        markers_list.append(marker_dict)
+        
+    paginator = Paginator(markers_list, 10)
+    
+    page_number = request.GET.get('page')
+    
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'search_results.html', {'page_obj': page_obj})
 
 @csrf_exempt
 def update_marker(request):

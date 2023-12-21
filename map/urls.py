@@ -2,17 +2,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from . import views
+from .views import MarkerListView
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('add-marker/', views.add_marker, name='add_marker'),
     path('edit-marker/<int:pk>', views.edit_marker, name='edit_marker'),
-    path('view-marker/', views.view_marker, name='view_marker'),
+    path('view-marker/', MarkerListView.as_view(), name='view_marker'),
     path('delete-marker/<int:pk>', views.delete_marker, name='delete_marker'),
     path('update-marker/', views.update_marker, name='update_marker'),
     path('code/', views.view_code, name='view_code'),
     path('create-code/', views.create_code, name='create_code'),
     path('api/markers', views.get_markers, name='get_markers'),
+    path('search-markers/', views.search_markers, name='search_markers'),
     path('logs/', views.view_audit_logs, name='view_audit_logs'),
     path("login/", views.login_attempt, name="login"),
     path("logout/", views.logout_view, name="logout"),

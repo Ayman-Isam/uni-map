@@ -41,6 +41,7 @@ nav ul li a {
     border-radius: 3px;
     text-transform: uppercase;
     text-decoration: none;
+    font-weight: 700;
 }
 
 nav ul li a:hover {
@@ -118,3 +119,81 @@ nav ul li a:hover {
         left: 0;
     }
 }
+
+.pagination {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+    bottom: 20px;
+    width: 100%;
+}
+
+.step-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-links a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #202020;
+    text-decoration: none;
+    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    transition: all 0.3s ease;
+}
+.step-links i {
+    margin-top: 20px;
+}
+
+.step-links a:hover {
+    background-color: #38ccfd;
+}
+
+.step-links .current {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    background-color: #38ccfd;
+    color: #202020;
+}
+
+#search {
+    height: 45px;
+    width: calc(100% - 120px);
+    margin: 20px 50px 0 50px;
+    outline: none;
+    font-size: 19px;
+    border-radius: 10px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.search-input {
+    position: relative;
+}
+
+.search-input .icon {
+    position: absolute;
+    top: 65%;
+    right: 70px;
+    transform: translateY(-50%);
+    color: #adadad;
+    font-size: large;
+}
+
+#search:focus {
+    border-color: #30aef1;
+    box-shadow: 0 0 5px #30aef1;
+}
+

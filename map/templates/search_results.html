@@ -6,7 +6,6 @@ University Map
 {% endblock %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -26,16 +25,13 @@ University Map
                 <th>Location</th>
                 <th>Website</th>
                 <th>Program</th>
-                {% if user.is_authenticated %}
-                <th></th>
-                {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% if markers %}
-            {% for marker in markers %}
+            {% if page_obj.object_list %}
+            {% for marker in page_obj.object_list %}
             <tr data-search="{{ marker.name }} {{ marker.location }} {{ marker.website }} {% for program in marker.programs.all %}{{ program.get_program_type_display }} in {{ program.name }}{% endfor %}">
-                <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo.url }}" alt="{{ marker.name }} logo" />{% endif %}</td>
+                <td>{% if marker.logo %}<img class="uni-logo" src="{{ marker.logo }}" alt="{{ marker.name }} logo" />{% endif %}</td>
                 <td>{{ marker.name }}</td>
                 <td>{{ marker.location }}</td>
                 <td><a href="{{ marker.website }}" class="uni-title-link">{{ marker.website }}</a></td>
@@ -44,29 +40,6 @@ University Map
                         {{ program.get_program_type_display }} in {{ program.name }}<br><br>
                     {% endfor %}
                 </td>
-                {% if user.is_authenticated %}
-                <td>
-                    <a href="{% url 'edit_marker' pk=marker.pk %}">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <section>
-                        <a class="show-modal" data-delete-url="{% url 'delete_marker' pk=marker.pk %}">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
-                        <span class="overlay"></span>
-                        <div class="modal-box">
-                            <i class="fas fa-trash-alt"></i>
-                            <h2>Delete University?</h2>
-                            <h3>Are you sure you want to delete the university listing? This action is irreversible.</h3>
-                            <h4>Tip: Hold shift to ignore this warning</h4>
-                            <div class="buttons">
-                                <button class="close-btn">Cancel</button>
-                                <button><a href="{% url 'delete_marker' pk=marker.pk %}">Delete</a></button>
-                            </div>
-                        </div>
-                    </section>
-                </td>
-                {% endif %}
             </tr>
             {% endfor %}
             {% endif %}
@@ -102,17 +75,4 @@ University Map
         {% endif %}
     </span>
 </div>
-{% for message in messages %}
-<div class="custom-toast {{ message.tags }}">
-    <button class="close-button">
-        <i class="fas fa-times"></i>
-    </button>
-    <div class="toast-body">
-        <i class="icon"></i> {{ message }}
-    </div>
-    <div class="toast-progress-bar"></div>
-</div>
-{% endfor %}
-<script src="{% static 'js/modal.js'%}"></script>
-<script src="{% static 'js/search.js'%}"></script>
 {% endblock %}
