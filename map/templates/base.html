@@ -17,6 +17,7 @@
 	<script type="text/javascript" charset="utf-8" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
 	<script src="https://kit.fontawesome.com/9812d4ff58.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,12 +38,13 @@
 			<li><a href="{% url 'view_marker' %}">List</a></li>
 			{% if user.is_authenticated %}
 			<li><a href="{% url 'add_marker' %}">Add-Uni</a></li>
+			{% if user.is_superuser %}
+			<li><a href="{% url 'view_code' %}">Code</a></li>
+			<li><a href="{% url 'add_json' %}">Json</a></li>
+			{% endif %}
 			<li><a href="{% url 'logout' %}">Logout</a></li>
 			{% else %}
 			<li><a href="{% url 'login' %}">Login</a></li>
-			{% endif %}
-			{% if user.is_superuser %}
-			<li><a href="{% url 'view_code' %}">Code</a></li>
 			{% endif %}
 		</ul>
 	</nav>

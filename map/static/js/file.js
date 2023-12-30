@@ -101,6 +101,18 @@ document.getElementById('remove-program').addEventListener('click', function() {
     }
 });
 
+function geocodeAddress() {
+    var address = document.querySelector('input[name="location"]').value;
+    fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${address}&apiKey=szrQPzoAGEM6OAnlea5YEQa8LkILYDP3QBv--ehKuKM`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('input[name="latitude"]').value = data.items[0].position.lat;
+            document.querySelector('input[name="longitude"]').value = data.items[0].position.lng;
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
 
 
 

@@ -31,40 +31,23 @@ from django.core.paginator import Paginator
 def home(request):
     return render(request, 'home.html')
 
-def get_lat_lng_from_gmaps_url(url):
-   at_index = url.find('@')
-   comma_index = url.find(',', at_index)
-   if at_index != -1 and comma_index != -1:
-       lat = url[at_index + 1:comma_index]
-       lon_start = url.find(',', comma_index + 1)
-       if lon_start != -1:
-           lon = url[comma_index + 1:lon_start]
-           return float(lat), float(lon)
-   return None, None
-
 @login_required(login_url='login')
 def add_marker(request):
     markers = Marker.objects.all()
     program_types = Program.PROGRAM_TYPES
     if request.method == 'POST':
         name = request.POST.get('name')
-        map_url = request.POST.get('map_url')
-        if map_url is None:
-            messages.error(request, 'Map URL is required', extra_tags='toast-error')
-            context = {'error': 'Map URL is required.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
-            return render(request, 'add_marker.html', context)
-        location = request.POST.get('location')
         website = request.POST.get('website')
-        scholarship = request.POST.get('scholarship') == 'on'
+        location = request.POST.get('location')
         logo = request.FILES.get('logo')
-
-        lat, lng = get_lat_lng_from_gmaps_url(map_url)
+        lat = request.POST.get('latitude')
+        lng = request.POST.get('longitude')
         if lat is None or lng is None:
-            messages.error(request, 'Invalid Google Maps URL', extra_tags='toast-error')
-            context = {'error': 'Invalid Google Maps URL.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
+            messages.error(request, 'Latitude and Longitude are required', extra_tags='toast-error')
+            context = {'error': 'Latitude and Longitude are required.', 'markers': markers, 'program_types': program_types, 'form_data': request.POST}
             return render(request, 'add_marker.html', context)
 
-        marker = Marker(name=name, map_url=map_url, location=location, website=website, scholarship=scholarship, logo=logo, lat=lat, lng=lng)
+        marker = Marker(name=name, location=location, website=website, logo=logo, lat=lat, lng=lng)
         marker.save()
         AuditLog.objects.create(user=request.user, action='Create', details=f'Added marker {marker.name}')
         
@@ -98,22 +81,19 @@ def edit_marker(request, pk):
 
     if request.method == 'POST':
         name = request.POST.get('name')
-        map_url = request.POST.get('map_url')
-        location = request.POST.get('location')
         website = request.POST.get('website')
-        scholarship = request.POST.get('scholarship') == 'on'
+        location = request.POST.get('location')
         logo = request.FILES.get('logo')
-
-        lat, lng = get_lat_lng_from_gmaps_url(map_url)
+        lat = request.POST.get('latitude')
+        lng = request.POST.get('longitude')
         if lat is None or lng is None:
-            messages.error(request, 'Invalid Google Maps URL', extra_tags='toast-error')
-            return render(request, 'edit_marker.html', {'error': 'Invalid Google Maps URL.', 'marker': marker, 'program_types': program_types})
+            messages.error(request, 'Latitude and Longitude are required', extra_tags='toast-error')
+            context = {'error': 'Latitude and Longitude are required.', 'marker': marker, 'program_types': program_types, 'form_data': request.POST}
+            return render(request, 'add_marker.html', context)
 
         marker.name = name
-        marker.map_url = map_url
         marker.location = location
         marker.website = website
-        marker.scholarship = scholarship
         if logo:
             marker.logo.delete(save=False) 
             marker.logo = logo  
@@ -255,6 +235,44 @@ def view_code(request):
 def view_audit_logs(request):
     logs = AuditLog.objects.all()
     return render(request, 'audit_logs.html', {'logs': logs})
+
+@login_required(login_url='login')
+def add_json(request):
+    if request.method == 'POST':
+        json_data = request.POST.get('json_data')
+        if json_data is None:
+            messages.error(request, 'No data provided', extra_tags='toast-error')
+            return render(request, 'add_json.html')
+        try:
+            data = json.loads(json_data)
+            for university in data:
+                name = university.get('name')
+                if not name:
+                    messages.error(request, 'Name is required', extra_tags='toast-error')
+                    return JsonResponse({'status': 'error'})
+                location = university.get('location', '')
+                website = university.get('website', '')
+                lat = university.get('latitude', '')
+                lng = university.get('longitude', '')
+                
+                marker = Marker(name=name, location=location, website=website, lat=lat, lng=lng)
+                marker.save()
+                
+                if 'programs' in university:
+                    for program_data in university['programs']:
+                        program_name = program_data.get('name')
+                        program_type = program_data.get('program_type')
+                        if program_name and program_type:
+                            program = Program(name=program_name, program_type=program_type)
+                            program.save()
+                            marker.programs.add(program)
+            messages.success(request, 'Markers added successfully', extra_tags='toast-success')
+            return render(request, 'view_marker.html')
+        except json.JSONDecodeError:
+            messages.error(request, 'Invalid JSON', extra_tags='toast-error')
+            return render(request, 'add_json.html')
+    else:
+        return render(request, 'add_json.html')
 
 class CustomPasswordResetView(PasswordResetView):
     success_url = reverse_lazy('password_reset')

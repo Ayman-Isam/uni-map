@@ -20,21 +20,22 @@ University Map
                 <input type="text" name="name" placeholder="Enter University name" value="{{ marker.name }}" required>
             </div>
             <div class="field">
-                <label for="map_url">Map URL</label>
-                <input type="text" name="map_url" placeholder="Enter Google Maps Pin URL" value="{{ marker.map_url }}"
-                    required>
+                <label for="website">Website</label>
+                <input type="text" name="website" placeholder="Enter URL of Website" value="{{ marker.website }}" required>
             </div>
+        </div>
+        <div class="field">
+            <label for="location">Address</label>
+            <input type="text" name="location" placeholder="Enter Address of University" value="{{ marker.location }}" required onchange="geocodeAddress()">
         </div>
         <div class="field-row">
             <div class="field">
-                <label for="location">Location</label>
-                <input type="text" name="location" placeholder="Enter Location of University"
-                    value="{{ marker.location }}" required>
+                <label for="name">Latitude</label>
+                <input type="text" name="latitude" placeholder="Enter Latitude of University" value="{{ marker.lat }}" required>
             </div>
             <div class="field">
-                <label for="website">Website</label>
-                <input type="text" name="website" placeholder="Enter URL of Website" value="{{ marker.website }}"
-                    required>
+                <label for="website">Longitude</label>
+                <input type="text" name="longitude" placeholder="Enter Longitude of University" value="{{ marker.lng }}" required>
             </div>
         </div>
         <div id="program-container">

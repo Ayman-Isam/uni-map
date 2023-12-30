@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+University Map
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="json-container">
+    <form method="POST" class="json-form" action="/add-json/">
+        {% csrf_token %}
+        <div id="json-editor" class="json-text"></div>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="json-sidebar">
+        <h1>Sample Json Code</h1>
+        <div id="copyButton"><i class="far fa-copy"></i></div>
+        <div id="copied">Copied</div>
+        <p>
+            <pre>
+                <code>
+[
+    {
+        "name": "University of Example",
+        "location": "123 Example St, Example City, EX 12345",
+        "website": "https://www.example.edu",
+        "latitude": "40.712776",
+        "longitude": "-74.005974",
+        "programs": [
+            {
+                "name": "Computer Science",
+                "program_type": "Bachelor's degree"
+            },
+            {
+                "name": "Data Science",
+                "program_type": "Master's degree"
+            }
+        ]
+    },
+    {
+        "name": "Example State University",
+        "location": "456 Example Ave, Example City, EX 12345",
+        "website": "https://www.examplestate.edu",
+        "latitude": "40.712776",
+        "longitude": "-74.005974",
+        "programs": [
+            {
+                "name": "Mechanical Engineering",
+                "program_type": "Bachelor's degree"
+            },
+            {
+                "name": "Civil Engineering",
+                "program_type": "Master's degree"
+            }
+        ]
+    }
+]
+                </code>
+            </pre>
+        </p>
+    </div>
+</div>
+{% for message in messages %}
+<div class="custom-toast {{ message.tags }}">
+    <button class="close-button">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="toast-body">
+        <i class="icon"></i> {{ message }}
+    </div>
+    <div class="toast-progress-bar"></div>
+</div>
+{% endfor %}
+<script src="{% static 'js/editor.js'%}"></script>
+{% endblock %}

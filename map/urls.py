@@ -15,6 +15,7 @@ urlpatterns = [
     path('create-code/', views.create_code, name='create_code'),
     path('api/markers', views.get_markers, name='get_markers'),
     path('search-markers/', views.search_markers, name='search_markers'),
+    path('add-json/', views.add_json, name='add_json'),
     path('logs/', views.view_audit_logs, name='view_audit_logs'),
     path("login/", views.login_attempt, name="login"),
     path("logout/", views.logout_view, name="logout"),
