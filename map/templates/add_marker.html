@@ -31,11 +31,13 @@ University Map
         <div class="field-row">
             <div class="field">
                 <label for="name">Latitude</label>
-                <input type="text" name="latitude" placeholder="Enter Latitude of University" value="{{ form_data.latitude|default_if_none:'' }}" required>
+                <input type="text" id="latitude" name="latitude" placeholder="Enter Latitude of University" value="{{ form_data.latitude|default_if_none:'' }}" required>
+                <div id="latitude-spinner" class="spinner" style="display: none;" ></div>
             </div>
             <div class="field">
                 <label for="website">Longitude</label>
-                <input type="text" name="longitude" placeholder="Enter Longitude of University" value="{{ form_data.longitude|default_if_none:'' }}" required>
+                <input type="text" id="longitude" name="longitude" placeholder="Enter Longitude of University" value="{{ form_data.longitude|default_if_none:'' }}" required>
+                <div id="longitude-spinner" class="spinner" style="display: none;"></div>
             </div>
         </div>
         <div id="program-container">
@@ -75,19 +77,21 @@ University Map
                 <p>Drag and drop or click here to upload logo</p>
             </div>
         </label>
-        <button type="submit">Add University</button>
+        <button type="submit" id="submit-button">Add University</button>
     </form>
 </div>
 <div class="form-sidebar">
     <h2>Instructions</h2>
     <ul>
-        <li>1. Enter the official full name of the University (No Acroyms)</li>
-        <li>2. Enter the Google Maps URL of the university. To do this, search for the University on Google Maps, click on the location pin, copy the URL from the address bar, and paste it. </li>
-        <li>3. Enter the location of this University (including country), can be found on Google Maps</li>
-        <li>4. Enter the URL to the website of the university</li>
-        <li>5. Enter the type of degree the person got admitted into the university for</li>
-        <li>6. Enter the program the person is getting admitted for</li>
-        <li>7. Upload the logo of the university, preferably png</li>
+        <li>1. Provide the full official name of the University (Avoid using acronyms).</li>
+        <li>2. Input the URL of the university's official website.</li>
+        <li>3. Enter the complete address of the University, including the country.</li>
+        <li>4. Provide the geographical coordinates (latitude and longitude) of the University. This should be automatically filled if the address is valid. You can obtain these from Google Maps or any reliable source.</li>
+        <li>5. Select the type of degree for which the student is being admitted.</li>
+        <li>6. Specify the name of the program or course the student is enrolling in.</li>
+        <li>7. Upload the logo of the university. PNG format is preferred for better quality.</li>
+        <li>8. Click on "Add Course" to add more courses, and "Remove Course" to delete any added courses.</li>
+        <li>9. Once all the information is filled in, click on "Add University" to submit the form.</li>
     </ul>
 </div>
 {% for message in messages %}

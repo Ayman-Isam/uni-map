@@ -101,15 +101,6 @@
     margin-top: 20px;
 }
 
-.code-container input[type="text"],
-.code-container label {
-    margin-left: 10px;
-}
-
-.code-container input[type="text"] {
-    width: calc(100% + 10px);
-}
-
 .field-row {
     display: flex;
     justify-content: space-between;
@@ -440,4 +431,32 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     visibility: hidden;
     transition: all 0.5s ease;
+}
+
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+}
+
+#latitude-spinner {
+    position: absolute;
+    top: 330px;
+    left: 440px;
+    transform: translateY(-50%);
+}
+
+#longitude-spinner {
+    position: absolute;
+    top: 330px;
+    right: 50px;
+    transform: translateY(-50%);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

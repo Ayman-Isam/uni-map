@@ -103,13 +103,24 @@ document.getElementById('remove-program').addEventListener('click', function() {
 
 function geocodeAddress() {
     var address = document.querySelector('input[name="location"]').value;
+    var latitudeSpinner = document.getElementById('latitude-spinner');
+    var longitudeSpinner = document.getElementById('longitude-spinner');
+    latitudeSpinner.style.display = 'inline-block';
+    longitudeSpinner.style.display = 'inline-block';
+
     fetch(`https://geocode.search.hereapi.com/v1/geocode?q=${address}&apiKey=szrQPzoAGEM6OAnlea5YEQa8LkILYDP3QBv--ehKuKM`)
         .then(response => response.json())
         .then(data => {
             document.querySelector('input[name="latitude"]').value = data.items[0].position.lat;
             document.querySelector('input[name="longitude"]').value = data.items[0].position.lng;
+            latitudeSpinner.style.display = 'none';
+            longitudeSpinner.style.display = 'none';
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            latitudeSpinner.style.display = 'none';
+            longitudeSpinner.style.display = 'none';
+        }); 
 }
 
 

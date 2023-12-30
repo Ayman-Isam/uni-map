@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Program(models.Model):
     PROGRAM_TYPES = [
@@ -66,6 +67,9 @@ class Code(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_valid = models.BooleanField(default=True)
     expires_at = models.DateTimeField()
+    
+    def is_valid_code(self):
+        return self.is_valid and self.expires_at > timezone.now()
 
 class AuditLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
