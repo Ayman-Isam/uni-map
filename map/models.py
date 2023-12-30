@@ -44,6 +44,11 @@ class Marker(models.Model):
                 existing.logo.delete(save=False)
         super().save(*args, **kwargs)
         
+    def delete(self, *args, **kwargs):
+        if self.logo:
+            self.logo.delete(save=False)
+        super().delete(*args, **kwargs)
+        
     def to_representation(self):
         representation = super().to_representation()
         representation['programs'] = [program.to_dict() for program in self.programs.all()]
